@@ -20,11 +20,15 @@ async def on_ready():
   )
 
 @bot.command(name='reverse')
-async def reverse_string(ctx, mssg_rev):
+async def reverse_string(ctx, *mssg_rev):
+  response = ""
   if ctx.author == bot.user:
     return
   
-  await ctx.send(mssg_rev[::-1])
+  for arg in mssg_rev:
+    response = response + (arg[::-1]) + ""
+  
+  await ctx.send(response)
 
 @bot.command(name='roll_dice', help='Simulates rolling dice.')
 async def roll(ctx, number_of_dice: int, number_of_sides: int):
@@ -33,6 +37,10 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
         for _ in range(number_of_dice)
     ]
     await ctx.send(', '.join(dice))
+
+@bot.command(name='trivia')
+async def trivia_funct(ctx):
+  await ctx.send("trivia is working")
 
 keep_alive()
 TOKEN = os.environ.get('DISCORD_TOKEN')
