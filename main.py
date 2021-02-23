@@ -20,15 +20,11 @@ async def on_ready():
   )
 
 @bot.command(name='reverse')
-async def reverse_string(ctx, *mssg_rev):
-  response = ""
+async def reverse_string(ctx, *, mssg_rev):
   if ctx.author == bot.user:
     return
   
-  for arg in mssg_rev:
-    response = response + (arg[::-1]) + ""
-  
-  await ctx.send(response)
+  await ctx.send(mssg_rev[::-1])
 
 @bot.command(name='roll_dice', help='Simulates rolling dice.')
 async def roll(ctx, number_of_dice: int, number_of_sides: int):
