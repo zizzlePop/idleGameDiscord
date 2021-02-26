@@ -5,7 +5,6 @@ import discord
 from discord.ext import commands
 from keep_alive import keep_alive
 
-
 bot = commands.Bot(command_prefix='!')
 
 @bot.event
@@ -36,7 +35,21 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
 
 @bot.command(name='trivia')
 async def trivia_funct(ctx):
-  await ctx.send("trivia is working")
+  questions = ["What is the capitol of New Jersey?", "Which Star Wars movie did Boba Fett first appear in?", "What was the Japanese name for the NES?"]
+  answers = ["Trenton", "Episode V", "Super Famicom"]
+  prompt = random.choice(questions)
+  questionIndex = questions.index(prompt)
+
+#  await ctx.send(prompt)
+
+#  reply = 
+
+#  if answers.index(reply) == questionIndex:
+#    ctx.send("Correct answer!")   
+#  else:
+#    ctx.send("Incorrect answer, please try again.")
+
+  
 
 keep_alive()
 TOKEN = os.environ.get('DISCORD_TOKEN')
