@@ -1,4 +1,4 @@
-# bot.py
+# main.py
 import os
 import random
 import discord 
@@ -32,23 +32,6 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
         for _ in range(number_of_dice)
     ]
     await ctx.send(', '.join(dice))
-
-@bot.command(name='trivia', help='Simulates a trivia game.')
-async def trivia_funct(ctx):
-  questions = ["What is the capitol of New Jersey?", "Which Star Wars movie did Boba Fett first appear in?", "What was the Japanese name for the NES?"]
-  answers = ["Trenton", "Episode V", "Super Famicom"]
-  prompt = random.choice(questions)
-  questionIndex = questions.index(prompt)
-
-#  await ctx.send(prompt)
-
-#  reply = 
-
-#  if answers.index(reply) == questionIndex:
-#    ctx.send("Correct answer!")   
-#  else:
-#    ctx.send("Incorrect answer, please try again.")
-
   
 
 keep_alive()
