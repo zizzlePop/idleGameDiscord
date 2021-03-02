@@ -18,7 +18,7 @@ async def on_ready():
     f'{guild.name}(id: {guild.id})'
   )
 
-@bot.command(name='reverse')
+@bot.command(name='reverse', help='Reverses the message in the command')
 async def reverse_string(ctx, *, mssg_rev):
   if ctx.author == bot.user:
     return
@@ -33,7 +33,7 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
     ]
     await ctx.send(', '.join(dice))
 
-@bot.command(name='trivia')
+@bot.command(name='trivia', help='Simulates a trivia game.')
 async def trivia_funct(ctx):
   questions = ["What is the capitol of New Jersey?", "Which Star Wars movie did Boba Fett first appear in?", "What was the Japanese name for the NES?"]
   answers = ["Trenton", "Episode V", "Super Famicom"]
