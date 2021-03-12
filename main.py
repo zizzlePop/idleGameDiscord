@@ -2,19 +2,28 @@
 import os
 import random
 import discord 
+import db
 from discord.ext import commands
 from keep_alive import keep_alive
 
+client = discord.Client()
 bot = commands.Bot(command_prefix='!')
 
-@bot.event
+def update_playerlist(player_member):
+  if "players" in db.keys():
+    players = db["players"]
+    players.append(player_member)
+  else:
+    db["players"] = players
+
+@client.event
 async def on_ready():
-  for guild in bot.guilds:
+  for guild in client.guilds:
     if guild.name == GUILD:
       break
 
   print(
-    f'{bot.user.name} has connected to discord! \n'
+    f'{client.user.name} has connected to discord! \n'
     f'{guild.name}(id: {guild.id})'
   )
 
@@ -33,20 +42,6 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
     ]
     await ctx.send(', '.join(dice))
 
-"""
-
-@bot.command(name='trivia', help='Simulates a trivia game. (unfinished beta)')
-async def trivia_funct(ctx):
-  questions = ["What is the capitol of New Jersey?", "Which Star Wars movie did Boba Fett first appear in?", "What was the Japanese name for the NES?"]
-  answers = ["Trenton", "Episode V", "Super Famicom"]
-  prompt = random.choice(questions)
-  questionIndex = questions.index(prompt)
-
-  embedVar = discord.Embed(title="Trivia", desc="", color = 0x00ff00)
-  embedVar.add_field(name="Question: ", value=prompt, inline=False)
-  await ctx.send(embed=embedVar)
-  
-"""
 
 keep_alive()
 TOKEN = os.environ.get('DISCORD_TOKEN')
