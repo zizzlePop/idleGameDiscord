@@ -2,11 +2,13 @@
 import os
 import random
 import discord 
-import db
+import player
+from replit import db
 from discord.ext import commands
 from keep_alive import keep_alive
 
 client = discord.Client()
+guild = discord.Guild()
 bot = commands.Bot(command_prefix='!')
 
 def update_playerlist(player_member):
@@ -15,6 +17,13 @@ def update_playerlist(player_member):
     players.append(player_member)
   else:
     db["players"] = players
+
+def remove_player(index):
+  players = db["players"]
+  if len(players) > index:
+    del players[index]
+  db["players"] = players
+
 
 @client.event
 async def on_ready():
@@ -26,6 +35,10 @@ async def on_ready():
     f'{client.user.name} has connected to discord! \n'
     f'{guild.name}(id: {guild.id})'
   )
+
+  async for member in guild.fetch_members(limit=150):
+    player_obj = player.Player(client, member.id)
+    update_playerlist(player_obj)
 
 @bot.command(name='reverse', help='Reverses the message in the command')
 async def reverse_string(ctx, *, mssg_rev):
@@ -41,6 +54,13 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
         for _ in range(number_of_dice)
     ]
     await ctx.send(', '.join(dice))
+
+@bot.command(name='list')
+async def list_users(ctx):
+  players = []
+  if "players" in db.keys():
+    players = db["players"]
+  await ctx.send(players)
 
 
 keep_alive()
