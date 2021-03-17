@@ -7,16 +7,21 @@ from replit import db
 from discord.ext import commands
 from keep_alive import keep_alive
 
-client = discord.Client()
-guild = discord.Guild()
-bot = commands.Bot(command_prefix='!')
+
+intents = discord.Intents.all()
+intents.members = True
+client = discord.Client(intents = intents)
+bot = commands.Bot(command_prefix='!', intents = intents)
+
+
 
 def update_playerlist(player_member):
   if "players" in db.keys():
     players = db["players"]
     players.append(player_member)
-  else:
     db["players"] = players
+  else:
+    db["players"] = [player_member]
 
 def remove_player(index):
   players = db["players"]
@@ -32,11 +37,12 @@ async def on_ready():
       break
 
   print(
-    f'{client.user.name} has connected to discord! \n'
+    f'{client.user.name} has connected to discord! \n',
     f'{guild.name}(id: {guild.id})'
   )
 
   async for member in guild.fetch_members(limit=150):
+    print(member)
     player_obj = player.Player(client, member.id)
     update_playerlist(player_obj)
 
@@ -66,4 +72,6 @@ async def list_users(ctx):
 keep_alive()
 TOKEN = os.environ.get('DISCORD_TOKEN')
 GUILD = os.environ.get('DISCORD_GUILD')
+client.run(TOKEN)
 bot.run(TOKEN)
+

@@ -1,3 +1,4 @@
+import json 
 
 class Player:
 
@@ -7,3 +8,6 @@ class Player:
     self._currency = 0
     self._player_cps = 1.0
 
+  def print_score(self):
+    return self._playerID 
+    return self._currency
