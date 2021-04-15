@@ -2,18 +2,15 @@
 import os
 import random
 import discord 
-import player
 from replit import db
 from discord.ext import commands
 from keep_alive import keep_alive
 
 
+
 intents = discord.Intents.all()
 intents.members = True
-client = discord.Client(intents = intents)
 bot = commands.Bot(command_prefix='!', intents = intents)
-
-
 
 def update_playerlist(player_member):
   if "players" in db.keys():
@@ -30,21 +27,18 @@ def remove_player(index):
   db["players"] = players
 
 
-@client.event
+#this should run when the bot comes online and connects to the server
+@bot.event
 async def on_ready():
-  for guild in client.guilds:
+  for guild in bot.guilds:
     if guild.name == GUILD:
       break
 
   print(
-    f'{client.user.name} has connected to discord! \n',
+    f'{bot.user.name} has connected to discord! \n',
     f'{guild.name}(id: {guild.id})'
   )
 
-  async for member in guild.fetch_members(limit=150):
-    print(member)
-    player_obj = player.Player(client, member.id)
-    update_playerlist(player_obj)
 
 @bot.command(name='reverse', help='Reverses the message in the command')
 async def reverse_string(ctx, *, mssg_rev):
@@ -61,6 +55,15 @@ async def roll(ctx, number_of_dice: int, number_of_sides: int):
     ]
     await ctx.send(', '.join(dice))
 
+@bot.command(name='setup')
+async def bot_setup(ctx):
+  for guild in bot.guilds:
+    if guild.name == GUILD:
+      break
+
+  async for member in guild.fetch_members(limit=150):
+      update_playerlist(member.id)
+
 @bot.command(name='list')
 async def list_users(ctx):
   players = []
@@ -68,10 +71,14 @@ async def list_users(ctx):
     players = db["players"]
   await ctx.send(players)
 
+@bot.command(name='removeBots')
+async def remove_bots(ctx, numOfBots: int):
+  for i in range(numOfBots):
+    remove_player(0)
 
 keep_alive()
 TOKEN = os.environ.get('DISCORD_TOKEN')
 GUILD = os.environ.get('DISCORD_GUILD')
-client.run(TOKEN)
+
 bot.run(TOKEN)
 
